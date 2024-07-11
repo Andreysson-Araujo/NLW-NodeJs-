@@ -7,6 +7,8 @@ import 'dayjs/locale/pt-br'
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
 import nodemailer from "nodemailer"
+import { ClientError } from "../errors/client-error";
+import { env } from "../env";
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -28,11 +30,11 @@ export async function createTrip(app: FastifyInstance) {
     const {destination, starts_at, ends_at, owner_name, owner_email, emails_to_invite} = request.body
 
     if (dayjs(starts_at).isBefore(new Date())) {
-      throw new Error("Invalid trip start date.")
+      throw new ClientError("Invalid trip start date.")
     }
 
     if (dayjs(ends_at).isBefore(starts_at)){
-      throw new Error("Invalid trip ends date.")
+      throw new ClientError("Invalid trip ends date.")
     }
 
     
@@ -74,7 +76,7 @@ export async function createTrip(app: FastifyInstance) {
     const formattedStartDate = dayjs(starts_at).format("LL")
     const formattedEndDate = dayjs(ends_at).format("LL")
 
-    const confirmationLink = `http://localhost:3333/trips/${trip.id}/confirm`
+    const confirmationLink = `${env.API_BASE_URL}/trips/${trip.id}/confirm`
 
     const mail = await getMailClient()
 

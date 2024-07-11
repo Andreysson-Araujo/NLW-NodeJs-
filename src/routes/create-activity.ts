@@ -7,6 +7,7 @@ import 'dayjs/locale/pt-br'
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
 import nodemailer from "nodemailer"
+import { ClientError } from "../errors/client-error";
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -33,15 +34,15 @@ export async function createActivity(app: FastifyInstance) {
       })
 
       if (!trip) {
-        throw new Error('Trip not Found')
+        throw new ClientError('Trip not Found')
       }
 
       if(dayjs(occurs_at).isBefore(trip.starts_at)){
-        throw new Error('Invalid activity date.')
+        throw new ClientError('Invalid activity date.')
       }
 
       if(dayjs(occurs_at).isAfter(trip.ends_at)){
-        throw new Error('Invalid activity date.')
+        throw new ClientError('Invalid activity date.')
       }
 
       const activity = await prisma.activity.create({

@@ -8,6 +8,7 @@ import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
 import nodemailer from "nodemailer"
 import { link } from "fs";
+import { ClientError } from "../errors/client-error";
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -36,7 +37,7 @@ export async function getOneParticipant(app: FastifyInstance) {
       })
 
       if (!participant) {
-        throw new Error('Participant not Found')
+        throw new ClientError('Participant not Found')
       }
 
       

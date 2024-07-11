@@ -7,6 +7,7 @@ import 'dayjs/locale/pt-br'
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
 import nodemailer from "nodemailer"
+import { ClientError } from "../errors/client-error";
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -33,7 +34,7 @@ export async function createLink(app: FastifyInstance) {
       })
 
       if (!trip) {
-        throw new Error('Trip not Found')
+        throw new ClientError('Trip not Found')
       }
 
 

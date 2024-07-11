@@ -7,6 +7,7 @@ import 'dayjs/locale/pt-br'
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
 import nodemailer from "nodemailer"
+import { ClientError } from "../errors/client-error";
 
 dayjs.locale('pt-br')
 dayjs.extend(localizedFormat)
@@ -41,7 +42,7 @@ export async function updateTrip(app: FastifyInstance) {
     }
 
     if (dayjs(ends_at).isBefore(starts_at)){
-      throw new Error("Invalid trip ends date.")
+      throw new ClientError("Invalid trip ends date.")
     }
 
     await prisma.trip.update({
