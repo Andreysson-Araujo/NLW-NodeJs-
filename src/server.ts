@@ -9,6 +9,11 @@ import { createActivity } from "./routes/create-activity"
 import { getActivity } from "./routes/get-activities"
 import { createLink } from "./routes/create-links"
 import { getLinks } from "./routes/get-links"
+import { getParticipants } from "./routes/get-participants"
+import { createInvite } from "./routes/create-invite"
+import { updateTrip } from "./routes/update-trip"
+import { getTrioDetails } from "./routes/get-trip-details"
+import { getOneParticipant } from "./routes/get-one-participant"
 
 const app = fastify()
 
@@ -21,12 +26,16 @@ app.setSerializerCompiler(serializerCompiler)
 
 app.register(createTrip)
 app.register(confirmTrip)
+app.register(updateTrip)
+app.register(getTrioDetails)
 app.register(confirmParticipant)
+app.register(getParticipants)
+app.register(getOneParticipant)
 app.register(createActivity)
 app.register(getActivity)
 app.register(createLink)
 app.register(getLinks)
-
+app.register(createInvite)
 
 app.listen({port: 3333}).then(() => {
   console.log("Server running")
